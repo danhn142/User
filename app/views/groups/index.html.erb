@@ -1,0 +1,56 @@
+<nav class="navbar navbar-default">
+	<ul class="nav nav-tabs pull-right">
+		<li role="presentation">
+			<% if current_user %>
+			  <form action='/sessions' method='post'>
+			    <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+			    <input type='hidden' name='_method' value='delete'>
+			    <input type='submit' value='Log Out'>
+			  </form>
+			<% end %>
+		</li>
+	</ul>
+</nav>
+
+
+
+<div class = "container">
+	<div>
+		<h3>Hi <%= current_user.first_name %> <%= current_user.last_name %></h3>
+	</div>
+	<br>
+	<div class="row">
+	  <div class="col-md-6">
+	  	<h4>Here are the organizations you may join</h4>
+	  	
+	  	<% @group.order(created_at: :desc).each do |group| %>
+		  	<div>
+	  			<h3><a href="/groups/<%= group.id %>"><%= group.name %></a></h3>
+	  			<p>Members: <%= group.attendings.count %></p>
+	  			<p><%= group.description %></p>	  		
+		  	</div>
+	  	<% end %>
+
+	  </div>
+
+	  <div class="col-md-6">
+	  	<form action = "/groups" method = "post">
+	  		<input type = "hidden" name = "authenticity_token" value = "<%= form_authenticity_token %>">
+			<div>
+				Org Name: <input type = "text" name = "group[name]">
+			</div>
+			<br>
+			<div>
+Description:<textarea name = "group[description]"></textarea>
+			</div>
+
+			<div>
+				<input type = "submit" value = "Submit a New Organization">
+			</div>
+	  	</form>
+	  </div>
+
+	</div>
+
+
+</div>
